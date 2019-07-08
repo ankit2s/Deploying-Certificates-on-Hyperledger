@@ -1,0 +1,9 @@
+query Q1{
+  description:"This query finds the seafarers with desired rank and exxperience"
+  
+  statement: 
+            SELECT org.example.mynetwork.Seafarer
+
+                WHERE (rank==_$rankParam)
+}
+
