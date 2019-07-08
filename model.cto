@@ -1,0 +1,526 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace org.example.mynetwork
+
+concept VesselType
+{
+o String category
+o String subType
+}
+
+concept Owner
+{
+o String name
+o PhoneNumber[] phoneNumber
+}
+
+concept VesselDetails
+{
+o String vesselName
+o VesselType vesselType
+o Integer imoNumber
+o Owner registeredOwner
+o Owner activeOwner
+o String flag
+o String foConsumptionLoaded
+o String draft
+o Double lengthLOA
+o Double lengthLBP
+o Double breadth
+o Double depth
+o String emailId
+o String satcNumber
+o String satcEmail
+}
+
+concept Engine
+{
+o String engineType
+o String auxiliaryEngine
+}
+
+concept ECDISType
+{
+o String name
+}
+
+concept TechSpecs
+{
+o Engine engineTypeDetails
+o String craneType
+o String dTW
+o String bHP
+o String generatorType
+o String gRT
+o String pumpingSystem
+o String reefers
+o String keelLaid
+o Integer teuTwentyFootEquivalent
+o Integer ballasticCapacity
+o ECDISType ecdisType 
+}
+
+concept Location
+{
+ o String longitude
+ o String lattitude
+ o DateTime dateRecorded
+}
+
+concept Port
+{
+  o String name
+  o String country
+}
+
+concept Voyage {
+ o Location lastLocation
+ o Port nextPort
+ o DateTime eTA
+ o DateTime eTB
+ o DateTime eTD
+}
+
+concept CharterPartyDetails
+{
+  o String consumption
+  o String headCharter
+  o String subCharter
+  o String subSubCharter
+}
+
+concept SpeedRegulation
+{
+  o String typeOfVessel
+  o String speedLimitMilesPerHour
+}
+
+concept AgentDetail
+{
+  o String name
+  o PhoneNumber phoneNumber
+  o String email
+}
+
+concept CharterPolicy
+{
+  o String operationalParameters
+  o SpeedRegulation speed
+  o CharterPartyDetails charterPartyDetails
+  o AgentDetail agentDetails
+  o String matrix
+}
+
+concept ClassDetails
+{
+  o String claSS
+  o Integer classNumber
+  o String classSign
+}
+
+concept ShipBuilderDetails
+{
+  o String name
+  o Address[] address
+  o String Email
+}
+
+concept TradingArea
+{
+  o String Country
+}
+
+concept OwnershipHistory
+{
+  o Owner takenOverFrom
+  o Owner currentOwner
+  o DateTime takeoverDate
+}
+
+concept LifeBoat
+{
+  o String code
+  o String typeOfBoats
+}
+
+participant Vessel identified by officialNumber
+{
+o String officialNumber
+o String mMSI 
+o ClassDetails classDetails
+o ShipBuilderDetails shipBuilderDetails   
+o Integer hullNumber
+o String management  //---???
+o Double grossTon
+o Double netTOn
+o Double capacity
+o Double deadWeight //Season ---??
+o DateTime buildDate
+o DateTime anniversaryDate
+o DateTime withEffectDate
+o OwnershipHistory ownershipHistory
+o Port portOfRegistery  
+o TradingArea[] tradingAreas  
+o String nationality
+o DateTime launched
+o DateTime delivered
+o SpeedRegulation serviceSpeed   //--- 
+o String manningDesignComplement
+o LifeBoat[] lifeBoats   
+
+o CharterPolicy[] charterPolicies
+o Voyage[] voyages
+o VesselDetails vesselDetails
+o TechSpecs techSpecs
+//--> VesselCertificate[] vesselCertificates
+}
+
+abstract asset Certificate identified by certificateId
+{
+o String certificateId   
+o String certificateName
+o String placeOfIssue
+o DateTime issueDate
+o DateTime expiryDate
+o String issuingAuthority
+o DateTime lastUpdatedOn
+o CertificateStatus certificateStatus
+//o Boolean isCurrentCertificate default = true
+}
+
+asset FlagCertificate extends Certificate
+{
+o DateTime cOEIssueDate
+o DateTime cOEExpiryDate
+o DateTime cRAIssueddate
+o DateTime cRAExpiryDate 
+--> Seafarer seafarer
+}
+
+asset VesselCertificate extends Certificate
+{
+  --> Vessel vessel
+}
+
+
+asset SeafarerCertificate extends Certificate
+{
+ --> Seafarer seafarer
+}
+
+asset  TrainingCertificate extends Certificate
+{
+o String subSpecialization
+o String trainingType
+o String regulation
+o String grade
+o String remarks
+o DateTime from
+o DateTime to
+--> Seafarer seafarer
+}
+
+asset MedicalCertificate extends Certificate 
+{   
+  o String category
+  o String type
+  --> Seafarer seafarer
+}
+
+concept PhoneNumber
+{
+  o String mobileNumber
+  o String alternateMobileNumber
+  o String emergencyContactNumber
+}
+
+enum AddressType
+{
+  o PERMANENT
+  o CORRESPONDANCE
+}
+
+concept Address
+{
+o String  line1
+o String  city
+o String  country
+o String  state
+o String  pincode
+o AddressType addressType
+}
+
+concept PersonalDetails {
+o String  eMail
+o String  alternateEMail
+o String  emergencyContactPerson
+o String  nearestAirportToHome
+o String  religion
+o String  maritalStatus
+o String  bloodGroup
+o Double  height
+o Double  weight
+o Integer  shoeSize
+o String[]  languagesKnown
+o String  hairColour
+o Integer  boilerSuitSize
+o String  EyeColour
+
+o Address[] Address
+o PhoneNumber[] phoneNumber
+}
+
+concept SeaExperience
+{ 
+o String vesselName
+o Double experience
+o String certificateNumber
+o String trainingType
+o String regulation
+o String grade
+o DateTime from
+o DateTime to
+o String Remarks
+o String craneType
+o Engine engineDetails 
+o String vesselGRT
+o String engineBHP
+o String vesselDWT
+o DateTime lastUpdatedOn
+}
+
+enum DocumentType
+{
+  o VISA
+  o PASSPORT
+}
+
+concept TravelDocuments
+{
+o DocumentType documentType
+o String documentNumber
+o DateTime issuedate
+o DateTime expiryDate
+o String country
+o String issuingAuthority
+o String placeOfIssue
+o DateTime lastUpdatedOn
+}
+
+
+concept FamilyDetail
+{
+o String name
+o String relationship
+o DateTime dateOfBirth
+o String passportNumber
+o String placeOfIssue
+o DateTime passportIssuedOn
+o DateTime passportExpiresOn
+o DateTime dataUpdatedOn
+}
+
+concept BankDetails
+{
+ o String accountNumber
+ o Address bankAddress
+ o String accountType
+ o String bank
+ o String branch
+ o String beneficiaryName
+ o String ifscCode
+ o String primaryAccount
+ o String swiftCode
+ o String routingNumber
+ o DateTime lastUpdatedOn
+}
+
+concept EducationDetails 
+{
+o String courseName
+o String collegeUniversitySchool
+o String country 
+o Integer completionYear
+o String percentage
+o String city
+o String state
+o DateTime lastUpdatedOn
+}
+
+concept AttachedDocuments 
+{
+o String nameOfDocument
+o String attachedYN
+o DateTime dateAttached
+}
+
+concept AvailabilityStatus
+{
+  o Boolean isAvailable
+  o DateTime from
+  o DateTime to
+}
+
+enum CertificateStatus
+{
+  o VERIFIED
+  o UNVERIFIED
+}
+
+enum StatusOfApplication
+{
+  o ACCEPTED
+  o ON_HOLD
+  o REJECTED
+}
+
+participant Seafarer identified by seafarerId 
+{
+o String seafarerId
+o String crewCodeInternal
+o String crewCodeExternal
+o String name
+o String rank
+o String nationality
+o DateTime dateOfBirth
+o DateTime dateOfJoiningSynergy
+o String placeOfBirth
+o AvailabilityStatus availabilityStatus
+o AttachedDocuments attachedDocuments
+o EducationDetails educationDetails
+o BankDetails bankDetails
+o FamilyDetail familyDetail
+//--> MedicalCertificate[] medicalCertificates
+//--> TrainingCertificate[] trainingCertificates
+//--> FlagCertificates[] flagCertificates
+//--> SeafarerCertificate[] seafarerCertificates
+o TravelDocuments travelDocuments
+o SeaExperience seaExperience
+o PersonalDetails personalDetails
+o StatusOfApplication statusOfApplication
+}
+
+participant ShippingAuthority identified by shippingAuthorityId
+{
+  o String shippingAuthorityId
+  o Owner owner
+  o Address[] address
+}
+
+participant TrainingInstitute identified by trainingInstituteId 
+{
+  o String trainingInstituteId
+  o Owner owner
+  o Address[] address
+}
+
+participant ShipCertificationAuthority identified by certificateAuthorityId
+{
+  o String certificateAuthorityId
+  o Owner owner
+  o Address[] address
+}
+
+transaction issueTrainCertificate
+{
+  --> Seafarer seafarer
+  --> TrainingCertificate trainingCert
+}
+
+transaction issueMedicCertificate
+{
+  --> Seafarer seafarer
+  --> MedicalCertificate medicalCert
+}
+
+transaction issueFlagCertificate
+{
+  --> Seafarer seafarer
+  --> FlagCertificate flagCert
+}
+
+transaction issueSeafarerCertificate
+{
+  --> Seafarer seafarer
+  --> SeafarerCertificate seafarerCert
+}
+
+transaction issueVesselCertificate
+{
+  --> Vessel vessel
+  --> VesselCertificate vesselCert
+}
+
+transaction viewAllCertificatesSeafarer
+{
+  --> Seafarer seafarer
+}
+
+transaction viewAllCertificatesVessel
+{
+  --> Vessel vessel
+}
+
+transaction verifyFlagCertificate
+{
+  --> FlagCertificate certificate
+  o CertificateStatus certificateStatus
+}
+
+transaction verifyTrainingCertificate
+{
+  --> TrainingCertificate certificate
+  o CertificateStatus certificateStatus
+}
+
+transaction verifySeafarerCertificate
+{
+  --> SeafarerCertificate certificate
+  o CertificateStatus certificateStatus
+}
+
+transaction verifyMedicalCertificate
+{
+  --> MedicalCertificate certificate
+  o CertificateStatus certificateStatus
+}
+
+
+transaction verifyVesselCertificate
+{
+  --> VesselCertificate certificate
+  o CertificateStatus certificateStatus
+}
+
+concept SearchParam 
+{
+  o SeaExperience experience
+  o String rank
+}
+
+transaction searchSeaFarerByParams
+{
+  o String rank
+}
+
+transaction certificateStatusSeafarer
+{
+  --> Seafarer seafarer
+}
+
+transaction  certificateStatusVessel
+{
+  --> Vessel vessel
+}
