@@ -1,0 +1,73 @@
+/**
+ * Access control rules for mynetwork 
+ */
+rule R1{
+    description: "Only Training institute can issue a certificate"
+    participant: "org.example.mynetwork.TrainingInstitute"
+    operation: READ,CREATE,UPDATE
+    resource: "org.example.mynetwork.TrainingCertificate"
+    action: ALLOW
+}
+
+rule R2
+{
+  description: "Shipping authority can read all the certificates"
+  participant: "org.example.mynetwork.ShippingAuthority"
+  operation: READ
+  resource: "org.example.mynetwork.*"
+  action: ALLOW
+}
+
+rule R3
+{
+  description: "Ship Certification Authority can do anything on the certificates"
+  participant: "org.example.mynetwork.ShipCertificationAuthority"
+  operation: ALL
+  resource: "org.example.mynetwork.*"
+  action: ALLOW
+}
+
+rule R4
+{
+  description: "Seafarers can only read their certificates"
+  participant: "org.example.mynetwork.Seafarer"
+  operation: READ
+  resource: "org.example.mynetwork.FlagCertificates"
+  action: ALLOW  
+}
+
+rule R5
+{
+  description: "Seafarers can only read their certificates"
+  participant: "org.example.mynetwork.Seafarer"
+  operation: READ
+  resource: "org.example.mynetwork.SeafarerCertificate"
+  action: ALLOW  
+}
+
+rule R6
+{
+  description: "Seafarers can only read their certificates"
+  participant: "org.example.mynetwork.Seafarer"
+  operation: READ
+  resource: "org.example.mynetwork.TrainingCertificate"
+  action: ALLOW  
+}
+
+rule R7
+{
+  description: "Seafarers can only read their certificates"
+  participant: "org.example.mynetwork.Seafarer"
+  operation: READ
+  resource: "org.example.mynetwork.MedicalCertificate"
+  action: ALLOW  
+}
+
+rule R8
+{
+  description: "Vessels can only read their certificates"
+  participant: "org.example.mynetwork.Vessel"
+  operation: READ
+  resource: "org.example.mynetwork.VesselCertificate"
+  action: ALLOW  
+}
